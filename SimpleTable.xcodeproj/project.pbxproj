@@ -14,6 +14,10 @@
 		F949584524703CA8006211E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F949584424703CA8006211E5 /* Assets.xcassets */; };
 		F949584824703CA8006211E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F949584624703CA8006211E5 /* LaunchScreen.storyboard */; };
 		F949585124703F39006211E5 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = F949585024703F39006211E5 /* Apollo */; };
+		F9495855247047D9006211E5 /* getProducts.graphql in Resources */ = {isa = PBXBuildFile; fileRef = F9495854247047D9006211E5 /* getProducts.graphql */; };
+		F949585724704DAD006211E5 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = F949585624704DAD006211E5 /* Network.swift */; };
+		F949585924704E34006211E5 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F949585824704E34006211E5 /* API.swift */; };
+		F949585B24705875006211E5 /* ProductsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F949585A24705875006211E5 /* ProductsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +29,11 @@
 		F949584424703CA8006211E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F949584724703CA8006211E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F949584924703CA8006211E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F949585324704745006211E5 /* schema.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = schema.json; sourceTree = "<group>"; };
+		F9495854247047D9006211E5 /* getProducts.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = getProducts.graphql; sourceTree = "<group>"; };
+		F949585624704DAD006211E5 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		F949585824704E34006211E5 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		F949585A24705875006211E5 /* ProductsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,13 +67,18 @@
 		F949583A24703CA6006211E5 /* SimpleTable */ = {
 			isa = PBXGroup;
 			children = (
+				F949585824704E34006211E5 /* API.swift */,
 				F949583B24703CA6006211E5 /* AppDelegate.swift */,
 				F949583D24703CA6006211E5 /* SceneDelegate.swift */,
 				F949583F24703CA6006211E5 /* ViewController.swift */,
 				F949584124703CA6006211E5 /* Main.storyboard */,
+				F949585A24705875006211E5 /* ProductsTableViewController.swift */,
 				F949584424703CA8006211E5 /* Assets.xcassets */,
 				F949584624703CA8006211E5 /* LaunchScreen.storyboard */,
 				F949584924703CA8006211E5 /* Info.plist */,
+				F949585324704745006211E5 /* schema.json */,
+				F9495854247047D9006211E5 /* getProducts.graphql */,
+				F949585624704DAD006211E5 /* Network.swift */,
 			);
 			path = SimpleTable;
 			sourceTree = "<group>";
@@ -76,6 +90,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F949584C24703CA8006211E5 /* Build configuration list for PBXNativeTarget "SimpleTable" */;
 			buildPhases = (
+				F9495852247045ED006211E5 /* Generate Apollo GraphQL API */,
 				F949583424703CA6006211E5 /* Sources */,
 				F949583524703CA6006211E5 /* Frameworks */,
 				F949583624703CA6006211E5 /* Resources */,
@@ -133,6 +148,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9495855247047D9006211E5 /* getProducts.graphql in Resources */,
 				F949584824703CA8006211E5 /* LaunchScreen.storyboard in Resources */,
 				F949584524703CA8006211E5 /* Assets.xcassets in Resources */,
 				F949584324703CA6006211E5 /* Main.storyboard in Resources */,
@@ -141,14 +157,38 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		F9495852247045ED006211E5 /* Generate Apollo GraphQL API */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Apollo GraphQL API";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Go to the build root and search up the chain to find the Derived Data Path where the source packages are checked out.\nDERIVED_DATA_CANDIDATE=\"${BUILD_ROOT}\"\n\nwhile ! [ -d \"${DERIVED_DATA_CANDIDATE}/SourcePackages\" ]; do\n  if [ \"${DERIVED_DATA_CANDIDATE}\" = / ]; then\n    echo >&2 \"error: Unable to locate SourcePackages directory from BUILD_ROOT: '${BUILD_ROOT}'\"\n    exit 1\n  fi\n\n  DERIVED_DATA_CANDIDATE=\"$(dirname \"${DERIVED_DATA_CANDIDATE}\")\"\ndone\n\n# Grab a reference to the directory where scripts are checked out\nSCRIPT_PATH=\"${DERIVED_DATA_CANDIDATE}/SourcePackages/checkouts/apollo-ios/scripts\"\n\nif [ -z \"${SCRIPT_PATH}\" ]; then\n    echo >&2 \"error: Couldn't find the CLI script in your checked out SPM packages; make sure to add the framework to your project.\"\n    exit 1\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}\"\n\"${SCRIPT_PATH}\"/run-bundled-codegen.sh codegen:generate --target=swift --includes=./**/*.graphql --localSchemaFile=\"schema.json\" API.swift\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F949583424703CA6006211E5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				F949584024703CA6006211E5 /* ViewController.swift in Sources */,
+				F949585B24705875006211E5 /* ProductsTableViewController.swift in Sources */,
 				F949583C24703CA6006211E5 /* AppDelegate.swift in Sources */,
+				F949585724704DAD006211E5 /* Network.swift in Sources */,
 				F949583E24703CA6006211E5 /* SceneDelegate.swift in Sources */,
+				F949585924704E34006211E5 /* API.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
