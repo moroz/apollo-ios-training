@@ -1,6 +1,14 @@
 query getProducts {
-    products {
-        id
-        name
+  products {
+    id
+    name
+    inStock
+    basePrices {
+      currencyId
+      amount
     }
+    description
+    imageUrl(size: THUMB_2X)
+    slug
+  }
 }

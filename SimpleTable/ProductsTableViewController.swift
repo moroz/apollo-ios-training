@@ -8,6 +8,26 @@
 
 import UIKit
 
+class ProductTableViewCell: UITableViewCell {
+    @IBOutlet weak var productNameLabel: UILabel!
+    @IBOutlet weak var productPriceLabel: UILabel!
+    @IBOutlet weak var productImageView: UIImageView!
+}
+
+extension UIImageView {
+    func load(url: URL) {
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self?.image = image
+                    }
+                }
+            }
+        }
+    }
+}
+
 class ProductsTableViewController: UITableViewController {
     var products = [GetProductsQuery.Data.Product]()
 
@@ -36,9 +56,19 @@ class ProductsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "datacell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! ProductTableViewCell
         
-        cell.textLabel?.text = products[indexPath.row].name
+        let product = products[indexPath.row]
+        if let imageUrl = product.imageUrl {
+            let url = URL(string: imageUrl)
+            cell.productImageView.load(url: url!)
+        }
+        cell.productNameLabel?.text = product.name
+        let basePrice = product.basePrices.first?.amount ?? "0"
+        let rounded = (basePrice as NSString).floatValue
+        cell.productPriceLabel?.text = "NT$\(rounded)"
+       
+                
         return cell
     }
 
