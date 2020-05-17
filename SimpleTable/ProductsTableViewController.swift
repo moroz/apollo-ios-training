@@ -28,19 +28,22 @@ extension UIImageView {
     }
 }
 
-class ProductsTableViewController: UITableViewController {
+class ProductsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    @IBOutlet var tableView: UITableView!
     var products = [GetProductsQuery.Data.Product]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         loadProducts()
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return products.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "datacell"
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! ProductTableViewCell
         let product = products[indexPath.row]
@@ -74,7 +77,7 @@ class ProductsTableViewController: UITableViewController {
               }
 
              defer {
-                self.tableView.reloadData()
+                self.tableView?.reloadData()
              }
 
               switch result {
